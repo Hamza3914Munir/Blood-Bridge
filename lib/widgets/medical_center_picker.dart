@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../data/lists/blood_banks.dart';
 import '../data/lists/hospitals.dart';
-import '../data/lists/lrc_centers.dart';
-import '../data/lists/medical_centers.dart';
 import '../data/medical_center.dart';
 
 class MedicalCenterPicker extends StatefulWidget {
@@ -21,7 +18,18 @@ class _MedicalCenterPickerState extends State<MedicalCenterPicker> {
   @override
   void initState() {
     super.initState();
-    _centers = hospitals;
+    _centers = hospitals.map((h) => MedicalCenter(
+      name: h['name'] as String,
+      location: h['location'] as String,
+    )).toList();
+  }
+
+  void _updateCenters(MedicalCenterCategory category) {
+    final data = category == MedicalCenterCategory.hospitals ? hospitals : bloodBanks;
+    _centers = data.map((c) => MedicalCenter(
+      name: c['name'] as String,
+      location: c['location'] as String,
+    )).toList();
   }
 
   @override
@@ -29,13 +37,10 @@ class _MedicalCenterPickerState extends State<MedicalCenterPicker> {
     final textTheme = Theme.of(context).textTheme;
     final filtered = _centers
         .where((c) =>
-            c.name
-                .toLowerCase()
-                .contains(_searchController.text.toLowerCase()) ||
-            c.location
-                .toLowerCase()
-                .contains(_searchController.text.toLowerCase()))
+    c.name.toLowerCase().contains(_searchController.text.toLowerCase()) ||
+        c.location.toLowerCase().contains(_searchController.text.toLowerCase()))
         .toList();
+
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.8,
@@ -67,31 +72,14 @@ class _MedicalCenterPickerState extends State<MedicalCenterPicker> {
                       value: _category,
                       items: MedicalCenterCategory.values
                           .map((c) => DropdownMenuItem(
-                                value: c,
-                                child: Text(c.name),
-                              ))
+                        value: c,
+                        child: Text(c.name),
+                      ))
                           .toList(),
                       onChanged: (cat) {
-                        if (cat == _category) return;
-
-                        switch (cat) {
-                          case MedicalCenterCategory.hospitals:
-                            _centers = hospitals;
-                            break;
-                          case MedicalCenterCategory.lrcCenters:
-                            _centers = lrcCenters;
-                            break;
-                          case MedicalCenterCategory.bloodBanks:
-                            _centers = bloodBanks;
-                            break;
-                          case MedicalCenterCategory.medicalCenters:
-                            _centers = medicalCenters;
-                            break;
-                          case null:
-                            // TODO: Handle this case.
-                            break;
-                        }
-                        setState(() => _category = cat!);
+                        if (cat == null || cat == _category) return;
+                        _updateCenters(cat);
+                        setState(() => _category = cat);
                       },
                     ),
                   ),
@@ -105,11 +93,11 @@ class _MedicalCenterPickerState extends State<MedicalCenterPicker> {
                 itemBuilder: (context, i) => ListTile(
                   dense: true,
                   title: Text(
-                    filtered[i].name ?? '',
+                    filtered[i].name,
                     style: textTheme.titleMedium,
                   ),
                   subtitle: Text(
-                    filtered[i].location ?? '',
+                    filtered[i].location,
                     style: textTheme.bodyMedium
                         ?.copyWith(color: textTheme.bodySmall?.color),
                   ),
@@ -124,23 +112,23 @@ class _MedicalCenterPickerState extends State<MedicalCenterPicker> {
       },
     );
   }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 }
 
-enum MedicalCenterCategory { hospitals, lrcCenters, bloodBanks, medicalCenters }
+enum MedicalCenterCategory { hospitals, bloodBanks }
 
 extension on MedicalCenterCategory {
   String get name {
     switch (this) {
       case MedicalCenterCategory.hospitals:
         return 'Hospitals';
-      case MedicalCenterCategory.lrcCenters:
-        return 'Red Cross';
       case MedicalCenterCategory.bloodBanks:
         return 'Blood Banks';
-      case MedicalCenterCategory.medicalCenters:
-        return 'Others';
-      default:
-        return '';
     }
   }
 }

@@ -1,86 +1,122 @@
 [
   {
-    "name": "Spears Blood Bank",
-    "phone_numbers": ["01372802", "01372803", "01372804", "01372805"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Fatmid Foundation Blood Bank",
+    "location": "Karachi"
   },
   {
-    "name": "Gemayze Blood Bank",
-    "phone_numbers": ["01444102"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Shaukat Khanum Memorial Cancer Hospital Blood Bank",
+    "location": "Lahore"
   },
   {
-    "name": "Jounieh Blood Bank",
-    "phone_numbers": ["09931750"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Pakistan Red Crescent Society Blood Bank",
+    "location": "Islamabad"
   },
   {
-    "name": "Antelias Blood Bank",
-    "phone_numbers": ["04524164"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Indus Hospital Blood Bank",
+    "location": "Karachi"
   },
   {
-    "name": "Jbeil Blood Bank",
-    "phone_numbers": ["09945220"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Jinnah Hospital Blood Bank",
+    "location": "Lahore"
   },
   {
-    "name": "Beit El Dine Blood Bank",
-    "phone_numbers": ["03468728"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Civil Hospital Blood Bank",
+    "location": "Karachi"
   },
   {
-    "name": "Tripoli Blood Bank",
-    "phone_numbers": ["06601429"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Holy Family Hospital Blood Bank",
+    "location": "Rawalpindi"
   },
   {
-    "name": "Halba Blood Bank",
-    "phone_numbers": ["06695370"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Lady Reading Hospital Blood Bank",
+    "location": "Peshawar"
   },
   {
-    "name": "Zahle Blood Bank",
-    "phone_numbers": ["08804930"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Combined Military Hospital (CMH) Blood Bank",
+    "location": "Rawalpindi"
   },
   {
-    "name": "Saida Blood Bank",
-    "phone_numbers": ["07752141"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Services Hospital Blood Bank",
+    "location": "Lahore"
   },
   {
-    "name": "Tyr Blood Bank",
-    "phone_numbers": ["07740070"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Khyber Teaching Hospital Blood Bank",
+    "location": "Peshawar"
   },
   {
-    "name": "Nabatiye Blood Bank",
-    "phone_numbers": ["07768687"],
-    "location": "Beirut",
-    "latitude": "33.888630",
-    "longitude": "35.495480"
+    "name": "Mayo Hospital Blood Bank",
+    "location": "Lahore"
+  },
+  {
+    "name": "Nishtar Hospital Blood Bank",
+    "location": "Multan"
+  },
+  {
+    "name": "Fatima Jinnah General Hospital Blood Bank",
+    "location": "Quetta"
+  },
+  {
+    "name": "Sindh Institute of Urology and Transplantation (SIUT) Blood Bank",
+    "location": "Karachi"
+  },
+  {
+    "name": "Bahria International Hospital Blood Bank",
+    "location": "Lahore"
+  },
+  {
+    "name": "Ziauddin Hospital Blood Bank",
+    "location": "Karachi"
+  },
+  {
+    "name": "Sheikh Zayed Hospital Blood Bank",
+    "location": "Lahore"
+  },
+  {
+    "name": "Bolan Medical Complex Hospital Blood Bank",
+    "location": "Quetta"
+  },
+  {
+    "name": "Allama Iqbal Memorial Hospital Blood Bank",
+    "location": "Sialkot"
+  },
+  {
+    "name": "Fauji Foundation Hospital Blood Bank",
+    "location": "Rawalpindi"
+  },
+  {
+    "name": "Chughtai Lab Blood Bank",
+    "location": "Lahore"
+  },
+  {
+    "name": "Ali Blood Bank",
+    "location": "Karachi"
+  },
+  {
+    "name": "Al-Khidmat Foundation Blood Bank",
+    "location": "Karachi"
+  },
+  {
+    "name": "Punjab Blood Transfusion Authority (PBTA) Blood Bank",
+    "location": "Lahore"
+  },
+  {
+    "name": "Rawalpindi Blood Bank",
+    "location": "Rawalpindi"
+  },
+  {
+    "name": "Quetta Blood Bank",
+    "location": "Quetta"
+  },
+  {
+    "name": "Peshawar Blood Bank",
+    "location": "Peshawar"
+  },
+  {
+    "name": "Multan Blood Bank",
+    "location": "Multan"
+  },
+  {
+    "name": "Sialkot Blood Bank",
+    "location": "Sialkot"
   }
 ]

@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import '../common/colors.dart';
 import '../data/blood_request.dart';
 import '../screens/single_request_screen.dart';
-import '../utils/blood_types.dart';
 import '../utils/tools.dart';
 
 const kBorderRadius = 12.0;
 
-class BloodRequestTile extends StatelessWidget {
+class HistoryRequestTile extends StatelessWidget {
   final BloodRequest request;
 
-  const BloodRequestTile({Key? key, required this.request}) : super(key: key);
+  const HistoryRequestTile({Key? key, required this.request}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +22,27 @@ class BloodRequestTile extends StatelessWidget {
       ),
       child: Column(
         children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(kBorderRadius),
+                topRight: Radius.circular(kBorderRadius),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white, size: 16),
+                const SizedBox(width: 8),
+                Text(
+                  'Fulfilled',
+                  style: textTheme.labelMedium?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -45,17 +65,15 @@ class BloodRequestTile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Needed By', style: textTheme.bodySmall),
-                    Text(Tools.formatDate(request.requestDate) ?? ''),
-                    const SizedBox(height: 12),
+                    Text('Requested On', style: textTheme.bodySmall),
+                    Text(Tools.formatDate(request.submittedAt) ?? ''),
                     Text('Blood Type', style: textTheme.bodySmall),
-                    Text(request.bloodType.name ?? ''),
+                    Text(request.bloodType.name),
                   ],
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
           InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -78,7 +96,7 @@ class BloodRequestTile extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  'Details',
+                  'View Details',
                   style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),

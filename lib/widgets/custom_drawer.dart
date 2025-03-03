@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blood_bridge/screens/history_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import '../common/hive_boxes.dart';
 import '../screens/add_blood_request_screen.dart';
 import '../screens/add_news_item.dart';
 import '../screens/login_screen.dart';
+import '../screens/history_screen.dart';
 import '../screens/news_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/who_can_donate_screen.dart';
@@ -45,9 +47,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     },
                     child: const Tooltip(
                       message: 'Admin Screens',
-                      child: CircleAvatar(child: Icon(Icons.security_rounded)),
+                      child: CircleAvatar(child: Icon(Icons.security_rounded,)),
                     ),
                   ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewsItem()));
+                  },
+                  child: Tooltip(
+                    message: 'Add News',
+                    child: CircleAvatar(child: Icon(Icons.tips_and_updates)),
+                  ),
+                ),
                 InkWell(
                   onTap: () {
                     AwesomeDialog(
@@ -63,7 +74,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         FirebaseAuth.instance.signOut();
                         Navigator.of(context).pushNamedAndRemoveUntil(
                           LoginScreen.route,
-                          (route) => false,
+                              (route) => false,
                         );
                       },
                     ).show();
@@ -84,17 +95,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   clipBehavior: Clip.hardEdge,
                   child: user?.photoURL != null
                       ? CachedNetworkImage(
-                          imageUrl: user!.photoURL!,
-                          fit: BoxFit.cover,
-                          placeholder: (_, __) => const Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white70,
-                              ),
-                            ),
-                          ),
-                        )
+                    imageUrl: user!.photoURL!,
+                    fit: BoxFit.cover,
+                    placeholder: (_, __) => const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white70,
+                        ),
+                      ),
+                    ),
+                  )
                       : SvgPicture.asset(IconAssets.donor),
                 ),
               ),
@@ -108,33 +119,38 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   List<Widget> get _screens => [
-        const _DrawerTile(
-          title: 'Profile',
-          icon: Icons.person,
-          destination: ProfileScreen.route,
-        ),
-        const _DrawerTile(
-          title: 'Request Blood',
-          icon: Icons.bloodtype,
-          destination: AddBloodRequestScreen.route,
-        ),
-        if (_showAdmin)
-          const _DrawerTile(
-            title: 'Add News',
-            icon: Icons.add,
-            destination: AddNewsItem.route,
-          ),
-        const _DrawerTile(
-          title: 'News and Tips',
-          icon: Icons.notifications,
-          destination: NewsScreen.route,
-        ),
-        const _DrawerTile(
-          title: 'Can I donate blood?',
-          icon: Icons.question_mark,
-          destination: WhoCanDonateScreen.route,
-        ),
-      ];
+    const _DrawerTile(
+      title: 'Profile',
+      icon: Icons.person,
+      destination: ProfileScreen.route,
+    ),
+    const _DrawerTile(
+      title: 'Request Blood',
+      icon: Icons.bloodtype,
+      destination: AddBloodRequestScreen.route,
+    ),
+    const _DrawerTile(
+      title: 'History',
+      icon: Icons.history_sharp,
+      destination: HistoryScreen.route,
+    ),
+    if (_showAdmin)
+      const _DrawerTile(
+        title: 'Add News',
+        icon: Icons.add,
+        destination: AddNewsItem.route,
+      ),
+    const _DrawerTile(
+      title: 'News and Tips',
+      icon: Icons.notifications,
+      destination: NewsScreen.route,
+    ),
+    const _DrawerTile(
+      title: 'Can I donate blood?',
+      icon: Icons.question_mark,
+      destination: WhoCanDonateScreen.route,
+    ),
+  ];
 }
 
 class _DrawerTile extends StatelessWidget {

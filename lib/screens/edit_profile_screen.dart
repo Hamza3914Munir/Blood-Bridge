@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +13,7 @@ import '../common/assets.dart';
 import '../common/colors.dart';
 import '../common/hive_boxes.dart';
 import '../utils/blood_types.dart';
+import '../utils/cloudinary_service.dart';
 import '../widgets/action_button.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -36,6 +36,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   File? _image;
   final picker = ImagePicker();
+  final CloudinaryService _cloudinaryService = CloudinaryService();
 
   @override
   void initState() {
@@ -92,88 +93,88 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _imageRow() => InkWell(
-        onTap: _getImage,
-        borderRadius: BorderRadius.circular(90),
-        child: Container(
-          width: kProfileDiameter,
-          height: kProfileDiameter,
-          decoration: const BoxDecoration(
-            color: MainColors.accent,
-            shape: BoxShape.circle,
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              if (_image != null)
-                Image.file(
-                  _image!,
-                  fit: BoxFit.cover,
-                  height: kProfileDiameter,
-                  width: kProfileDiameter,
-                )
-              else if (_oldUser?.photoURL != null)
-                CachedNetworkImage(
-                  imageUrl: _oldUser!.photoURL!,
-                  height: kProfileDiameter,
-                  width: kProfileDiameter,
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) => const CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.white70,
-                    ),
-                  ),
-                )
-              else
-                SvgPicture.asset(IconAssets.donor),
-              Container(
-                height: 30,
-                width: kProfileDiameter,
-                color: MainColors.primary,
-                child: const Icon(Icons.upload, color: Colors.white, size: 16),
+    onTap: _getImage,
+    borderRadius: BorderRadius.circular(90),
+    child: Container(
+      width: kProfileDiameter,
+      height: kProfileDiameter,
+      decoration: const BoxDecoration(
+        color: MainColors.accent,
+        shape: BoxShape.circle,
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          if (_image != null)
+            Image.file(
+              _image!,
+              fit: BoxFit.cover,
+              height: kProfileDiameter,
+              width: kProfileDiameter,
+            )
+          else if (_oldUser?.photoURL != null)
+            CachedNetworkImage(
+              imageUrl: _oldUser!.photoURL!,
+              height: kProfileDiameter,
+              width: kProfileDiameter,
+              fit: BoxFit.cover,
+              placeholder: (_, __) => const CircularProgressIndicator(
+                strokeWidth: 2.5,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.white70,
+                ),
               ),
-            ],
+            )
+          else
+            SvgPicture.asset(IconAssets.donor),
+          Container(
+            height: 30,
+            width: kProfileDiameter,
+            color: MainColors.primary,
+            child: const Icon(Icons.upload, color: Colors.white, size: 16),
           ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 
   Widget _nameField() => TextFormField(
-        controller: _nameController,
-        keyboardType: TextInputType.name,
-        textCapitalization: TextCapitalization.words,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Name',
-          prefixIcon: Icon(Icons.person),
-        ),
-      );
+    controller: _nameController,
+    keyboardType: TextInputType.name,
+    textCapitalization: TextCapitalization.words,
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Name',
+      prefixIcon: Icon(Icons.person),
+    ),
+  );
 
   Widget _emailField() => TextFormField(
-        controller: _emailController,
-        keyboardType: TextInputType.emailAddress,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Email',
-          prefixIcon: Icon(Icons.email),
-        ),
-      );
+    controller: _emailController,
+    keyboardType: TextInputType.emailAddress,
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Email',
+      prefixIcon: Icon(Icons.email),
+    ),
+  );
 
   Widget _bloodTypeSelector() => DropdownButtonFormField<String>(
-        value: _bloodType,
-        onChanged: (v) => setState(() => _bloodType = v),
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Blood Type',
-          prefixIcon: Icon(Icons.bloodtype),
-        ),
-        items: BloodTypeUtils.bloodTypes
-            .map((v) => DropdownMenuItem(
-                  value: v,
-                  child: Text(v),
-                ))
-            .toList(),
-      );
+    value: _bloodType,
+    onChanged: (v) => setState(() => _bloodType = v),
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+      labelText: 'Blood Type',
+      prefixIcon: Icon(Icons.bloodtype),
+    ),
+    items: BloodTypeUtils.bloodTypes
+        .map((v) => DropdownMenuItem(
+      value: v,
+      child: Text(v),
+    ))
+        .toList(),
+  );
 
   Future _getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -181,16 +182,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() => _image = File(pickedFile.path));
     }
   }
+
   Future<void> _save() async {
-    // Ensure form is valid before proceeding
     if (_formKey.currentState?.validate() == true) {
       setState(() => _isLoading = true);
 
       try {
-        // Retrieve the current Firebase user
         final user = FirebaseAuth.instance.currentUser;
 
-        // Check if user is null
         if (user == null) {
           Fluttertoast.showToast(msg: 'User not found. Please log in again.');
           return;
@@ -198,19 +197,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
         String? newProfileUrl;
 
-        // Upload profile image if a new one has been selected
         if (_image != null) {
           Fluttertoast.showToast(msg: 'Uploading Image...');
-          final uploadTask = await FirebaseStorage.instance
-              .ref()
-              .child('avatars/${user.uid}')
-              .putFile(_image!);
-
-          // Get the image's download URL
-          newProfileUrl = await uploadTask.ref.getDownloadURL();
+          final response = await _cloudinaryService.uploadImage(_image!.path, 'blood bridge api');
+          newProfileUrl = response?.secureUrl;
         }
 
-        // Update display name and profile picture if necessary
         if (_nameController.text != (_oldUser?.displayName ?? '') ||
             newProfileUrl != null) {
           await user.updateDisplayName(_nameController.text);
@@ -220,16 +212,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           }
         }
 
-        // Update email if it's changed
         if (_emailController.text != (_oldUser?.email ?? '')) {
           await user.updateEmail(_emailController.text);
         }
 
-        // Retrieve initial blood type from local storage
         final initialBloodType = Hive.box(ConfigBox.key)
             .get(ConfigBox.bloodType, defaultValue: BloodType.aPos.name) as String;
 
-        // Update blood type in Firestore and locally if it's changed
         if (_bloodType != initialBloodType) {
           await FirebaseFirestore.instance
               .collection('users')
@@ -239,20 +228,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           Hive.box(ConfigBox.key).put(ConfigBox.bloodType, _bloodType);
         }
 
-        // Return to the previous screen after saving changes
         Navigator.pop(context);
       } on FirebaseException catch (e) {
-        // Handle Firebase-specific errors
         Fluttertoast.showToast(msg: e.message ?? 'Firebase error occurred.');
       } catch (e) {
-        // Handle generic errors
         Fluttertoast.showToast(
             msg: 'Something went wrong. Please try again later.');
       } finally {
-        // Stop loading spinner
         setState(() => _isLoading = false);
       }
     }
   }
-
 }

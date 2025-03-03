@@ -51,7 +51,7 @@ class _SubmittedBloodRequestsState extends State<SubmittedBloodRequests> {
         if (snapshot.hasError) {
           return Center(
             child: Text(
-              'Could not fetch submitted requests',
+              'Could not fetch submitted requests : ${snapshot.error}',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),

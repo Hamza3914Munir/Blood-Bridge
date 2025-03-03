@@ -20,6 +20,7 @@ class NewsScreen extends StatelessWidget {
           stream: news.orderBy('date', descending: true).limit(20).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
+              print('Error fetching news: ${snapshot.error}');
               return const Center(child: Text('Something went wrong'));
             }
 

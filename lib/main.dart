@@ -1,3 +1,4 @@
+import 'package:blood_bridge/screens/history_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.route,
       routes: {
         HomeScreen.route: (_) => const HomeScreen(),
+        HistoryScreen.route: (_) => const HistoryScreen(),
         TutorialScreen.route: (_) => const TutorialScreen(),
         LoginScreen.route: (_) => const LoginScreen(),
         RegistrationScreen.route: (_) => const RegistrationScreen(),

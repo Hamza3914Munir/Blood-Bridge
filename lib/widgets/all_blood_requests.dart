@@ -35,17 +35,30 @@ class _AllBloodRequestsState extends State<AllBloodRequests> {
       stream: _query,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          print('Error fetching blood requests: ${snapshot.error}');
           return SliverFillRemaining(
             hasScrollBody: false,
             child: Center(
               child: Text(
-                'Could not fetch blood requests',
+                'Could not fetch blood requests : ${snapshot.error}',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
           );
         }
+        // if (snapshot.hasError) {
+        //   return SliverFillRemaining(
+        //     hasScrollBody: false,
+        //     child: Center(
+        //       child: Text(
+        //         'Could not fetch blood requests',
+        //         textAlign: TextAlign.center,
+        //         style: Theme.of(context).textTheme.titleMedium,
+        //       ),
+        //     ),
+        //   );
+        // }
 
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.data!.docs.isEmpty) {

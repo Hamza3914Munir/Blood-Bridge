@@ -125,7 +125,7 @@ class _AddBloodRequestScreenState extends State<AddBloodRequestScreen> {
         decoration: const InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Contact number',
-          prefixText: '+961 ',
+          prefixText: '+92 ',
         ),
       );
 
