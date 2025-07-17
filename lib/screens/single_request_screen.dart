@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';  // Keep this import
+import 'package:url_launcher/url_launcher.dart';
 import '../common/colors.dart';
 import '../data/blood_request.dart';
 import '../utils/blood_types.dart';
 import '../utils/tools.dart';
+import '../utils/donation_tracking_helper.dart';
 
 class SingleRequestScreen extends StatelessWidget {
   final BloodRequest request;
@@ -172,6 +173,11 @@ class SingleRequestScreen extends StatelessWidget {
                 if (!request.isFulfilled &&
                     request.uid == FirebaseAuth.instance.currentUser?.uid)
                   _MarkFulfilledBtn(request: request),
+
+                // NEW: "I Donated" button for other users
+                if (!request.isFulfilled &&
+                    request.uid != FirebaseAuth.instance.currentUser?.uid)
+                  _IDonatedBtn(request: request),
               ],
             ),
           ),
@@ -180,7 +186,6 @@ class SingleRequestScreen extends StatelessWidget {
     );
   }
 }
-
 
 class _MarkFulfilledBtn extends StatefulWidget {
   final BloodRequest request;
@@ -236,6 +241,73 @@ class _MarkFulfilledBtnState extends State<_MarkFulfilledBtn> {
         child: Center(
           child: Text(
             'Mark as Fulfilled',
+            textAlign: TextAlign.center,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// NEW: Button for other users to mark that they donated
+class _IDonatedBtn extends StatefulWidget {
+  final BloodRequest request;
+
+  const _IDonatedBtn({Key? key, required this.request}) : super(key: key);
+
+  @override
+  _IDonatedBtnState createState() => _IDonatedBtnState();
+}
+
+class _IDonatedBtnState extends State<_IDonatedBtn> {
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Center(child: CircularProgressIndicator()),
+    )
+        : Padding(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Colors.blue[600],
+          ),
+          padding: MaterialStateProperty.all(
+            const EdgeInsets.all(12),
+          ),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          )),
+        ),
+        onPressed: () async {
+          setState(() => _isLoading = true);
+          try {
+            // Record donation and schedule notification
+            await DonationTrackingHelper.recordDonation();
+
+            Fluttertoast.showToast(
+              msg: 'Thank you for donating! Your next donation reminder has been scheduled.',
+            );
+
+            Navigator.pop(context);
+          } catch (e) {
+            Fluttertoast.showToast(
+              msg: 'Something went wrong. Please try again',
+            );
+          }
+          setState(() => _isLoading = false);
+        },
+        child: Center(
+          child: Text(
+            'I Donated Blood 🩸',
             textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme

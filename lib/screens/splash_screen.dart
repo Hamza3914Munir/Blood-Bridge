@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import '../common/assets.dart';
 import '../common/hive_boxes.dart';
 import '../common/styles.dart';
+import '../utils/donation_tracking_helper.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 import 'tutorial_screen.dart';
@@ -42,7 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
       _destination = TutorialScreen.route;
     } else if (FirebaseAuth.instance.currentUser != null) {
       _destination = HomeScreen.route;
-      _updateCachedData();
+      await _updateCachedData();
+
+      // Initialize donation tracking for existing users
+      await DonationTrackingHelper.initializeDonationTracking();
     } else {
       _destination = LoginScreen.route;
     }
@@ -84,8 +88,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   'Blood Donation',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontFamily: Fonts.logo,
-                      ),
+                    fontFamily: Fonts.logo,
+                  ),
                 ),
               ),
             ],

@@ -10,6 +10,7 @@ import 'common/styles.dart';
 import 'firebase_options.dart';
 import 'screens/add_blood_request_screen.dart';
 import 'screens/add_news_item.dart';
+import 'screens/chat_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
@@ -19,14 +20,23 @@ import 'screens/registration_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/tutorial_screen.dart';
 import 'screens/who_can_donate_screen.dart';
+import 'services/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Hive
   await Hive.initFlutter();
   await Hive.openBox(ConfigBox.key);
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Notification Service
+  await NotificationService().initialize();
+
   runApp(MyApp());
 }
 
@@ -55,6 +65,7 @@ class MyApp extends StatelessWidget {
         NewsScreen.route: (_) => const NewsScreen(),
         AddNewsItem.route: (_) => const AddNewsItem(),
         EditProfileScreen.route: (_) => const EditProfileScreen(),
+        ChatScreen.route: (_) => const ChatScreen(), // Added chat screen route
       },
     );
   }

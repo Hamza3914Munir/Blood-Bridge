@@ -5,6 +5,7 @@ import '../common/assets.dart';
 import '../common/colors.dart';
 import '../widgets/all_blood_requests.dart';
 import '../widgets/custom_drawer.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const route = 'home';
@@ -75,6 +76,21 @@ class HomeScreen extends StatelessWidget {
             AllBloodRequests(),
           ],
         ),
+
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatScreen()),
+          );
+        },
+        backgroundColor: MainColors.primary,
+        child: const Icon(
+          Icons.smart_toy,
+          color: Colors.white,
+        ),
+        tooltip: 'Chat with BloodBridge AI',
       ),
     );
   }
